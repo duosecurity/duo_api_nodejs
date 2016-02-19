@@ -92,6 +92,17 @@ module.exports['Query Parameter Checks'] = {
             'foo=1&foo_bar=2'
         );
         test.done();
+    },
+
+    'sort order with real-world common prefix': function(test) {
+        test.equals(
+            duo_api.canonParams({
+                'ip_whitelist_enroll_policy': '2',
+                'ip_whitelist': '1',
+            }),
+            'ip_whitelist=1&ip_whitelist_enroll_policy=2'
+        );
+        test.done();
     }
 };
 
