@@ -1,6 +1,7 @@
 {
     "name": "duo_api",
     "version": "1.0.0",
+    "license": "BSD-3-Clause",
     "description": "Duo API SDK for Node.js applications",
     "homepage": "https://www.duosecurity.com/api",
     "main": "lib/main.js",
@@ -9,14 +10,22 @@
         "url": "https://github.com/duosecurity/duo_api_nodejs.git"
     },
     "scripts": {
-        "test": "nodeunit tests"
+        "test": "nodeunit tests",
+        "lint": "eslint lib/ tests/"
     },
     "devDependencies": {
+        "eslint": "^4.18.2",
+        "eslint-config-standard": "^11.0.0",
+        "eslint-plugin-promise": "^3.7.0",
+        "eslint-plugin-standard": "^3.0.1",
+        "eslint-plugin-import": "^2.8.0",
+        "eslint-plugin-node": "^5.2.1",
         "nodeunit": ">= 0.8.6"
     },
     "optionalDependencies": {
         "nopt": ">= 2.1.2"
     },
+    "dependencies": {},
     "keywords": [
         "Duo Security",
         "Two-Factor Authentication"
