@@ -21,13 +21,13 @@ $ npm install
 System:
 
 ```
-$ npm install global duo_api
+$ npm install global @duosecurity/duo_api
 ```
 
 Or run the following to add to your project:
 
 ```
-$ npm install --save duo_api
+$ npm install --save @duosecurity/duo_api
 ```
 
 # Using
@@ -57,11 +57,10 @@ OK: 10 assertions (12ms)
 ```
 $ npm run lint
 
-> duo_api@1.0.0 lint duo_api_nodejs
+> @duosecurity/duo_api@1.0.0 lint duo_api_nodejs
 > eslint lib/ tests/
 ```
 
 # Support
 
 Report any bugs, feature requests, etc. to us directly: support@duosecurity.com
-
