@@ -173,22 +173,6 @@ module.exports['Canonicalization Checks'] = {
     test.done()
   },
 
-  'test-v3': function (test) { // v2 with json
-    let params = JSON_BODY
-    var actual = duo_api.canonicalize(
-      'POST',
-      'foO.BAr52.cOm',
-      '/Foo/BaR2/qux',
-      params,
-      'Tue, 04 Jul 2017 14:12:00',
-      3
-    )
-    test.equals(actual,
-      `Tue, 04 Jul 2017 14:12:00\nPOST\nfoo.bar52.com\n/Foo/BaR2/qux\n{"alpha":["a","b","c","d"],"data":"abc123","info":{"test":1,"another":2}}`
-    )
-    test.done()
-  },
-
   'test-v4': function (test) {
     let params = JSON_BODY
     let hashed_body = crypto.createHash('sha512')
