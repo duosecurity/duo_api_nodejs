@@ -20,7 +20,8 @@
         "eslint-plugin-node": "^5.2.1",
         "eslint-plugin-promise": "^3.7.0",
         "eslint-plugin-standard": "^3.0.1",
-        "mocha": "^5.2.0"
+        "mocha": "^5.2.0",
+        "nock": "^9.6.1"
     },
     "optionalDependencies": {
         "nopt": ">= 2.1.2"
