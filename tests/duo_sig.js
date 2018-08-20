@@ -1,7 +1,9 @@
-/* global describe it */
+/* global describe it beforeEach */
 var crypto = require('crypto')
 var assert = require('assert')
 var duo_api = require('../lib/duo_sig.js')
+var {Frame} = require('../lib/Frame')
+var nock = require('nock')
 
 let JSON_BODY = {
   'alpha': ['a', 'b', 'c', 'd'],
@@ -186,5 +188,33 @@ describe('Canonicalization Checks', function () {
 
     assert.equal(actual, `Tue, 04 Jul 2017 14:12:00\nPOST\nfoo.bar52.com\n/Foo/BaR2/qux\n\n${hashed_body}`)
     done()
+  })
+})
+
+var IKEY = 'DIXXXXXXXXXXXXXXXXXX'
+var SKEY = 'deadbeefdeadbeefdeadbeefdeadbeefdeadbeef'
+var API_HOSTNAME = 'api_hostname'
+var APP_BLOB = 'blob'
+var USER = 'testuser'
+let frame = new Frame(IKEY, SKEY, API_HOSTNAME)
+
+describe('Verifying initialize_auth', function () {
+  beforeEach(function () {
+    var date = new Date().toUTCString()
+    nock('https://' + API_HOSTNAME, {
+      reqheaders: {
+        'Content-type': 'application/json',
+        'Date': date,
+        'Host': API_HOSTNAME
+      }
+    }).post('/frame/api/v3/init', {'user': USER, 'app_blob': APP_BLOB, 'expire': 100000, 'client_version': '2.0'}).reply(200, {'response': {txid: 'txid'}, 'stat': 'OK'})
+  })
+
+  it('verify response on valid initialize_auth', function (done) {
+    frame.init(USER, APP_BLOB, 100000, '2.0', false, function (resp) {
+      assert.equal(resp.response.txid, 'txid')
+      assert.equal(resp.stat, 'OK')
+      done()
+    })
   })
 })
