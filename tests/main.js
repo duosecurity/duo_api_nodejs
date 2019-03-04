@@ -1,3 +1,4 @@
+/* global describe it beforeEach afterEach */
 var assert = require('assert')
 var nock = require('nock')
 var sinon = require('sinon')
@@ -21,11 +22,11 @@ describe('Verifying rate limited request retries', function () {
     client = new duo_api.Client(IKEY, SKEY, API_HOSTNAME)
   })
 
-  afterEach(function() {
+  afterEach(function () {
     clock.restore()
   })
 
-  function addRequests(statusCode, numRequests = 1) {
+  function addRequests (statusCode, numRequests = 1) {
     var stat = statusCode === OK_RESP_CODE ? 'OK' : 'FAIL'
     var date = new Date().toUTCString()
     var path = '/foo/bar'
@@ -53,37 +54,37 @@ describe('Verifying rate limited request retries', function () {
   })
 
   it('verify single rate limited response', function (done) {
-    let currentWaitSecs = 1000;
+    let currentWaitSecs = 1000
     var rateLimitedScope = addRequests(RATE_LIMITED_RESP_CODE)
     addRequests(OK_RESP_CODE)
     client.jsonApiCall('GET', '/foo/bar', {}, function (resp) {
       assert.equal(resp.stat, 'OK')
       done()
     })
-    
+
     // Don't tick the clock until after the request has been replied to,
     // otherwise we'll move the clock forward before adding the retry attempt
     // via setTimeout.
-    rateLimitedScope.on('replied', function(req, interceptor) {
-      clock.tick(currentWaitSecs + MAX_RANDOM_OFFSET);
+    rateLimitedScope.on('replied', function (req, interceptor) {
+      clock.tick(currentWaitSecs + MAX_RANDOM_OFFSET)
     })
     console.log('added emitter')
   })
-  
-  it('verify all rate limited responses', function(done) {
-    var currentWaitSecs = 1000;
+
+  it('verify all rate limited responses', function (done) {
+    var currentWaitSecs = 1000
     var scope = addRequests(RATE_LIMITED_RESP_CODE, 7)
 
     client.jsonApiCall('GET', '/foo/bar', {}, function (resp) {
       assert.equal(resp.stat, 'FAIL')
       done()
     })
-    
+
     // Don't tick the clock until after the request has been replied to,
     // otherwise we'll move the clock forward before adding the retry attempt
     // via setTimeout.
-    scope.on('replied', function(req, interceptor) {
-      clock.tick(currentWaitSecs + MAX_RANDOM_OFFSET);
+    scope.on('replied', function (req, interceptor) {
+      clock.tick(currentWaitSecs + MAX_RANDOM_OFFSET)
       currentWaitSecs = currentWaitSecs * BACKOFF_FACTOR
     })
   })
