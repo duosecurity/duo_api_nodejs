@@ -1,6 +1,6 @@
 {
     "name": "@duosecurity/duo_api",
-    "version": "1.0.1",
+    "version": "1.2.0",
     "license": "BSD-3-Clause",
     "description": "Duo API SDK for Node.js applications",
     "homepage": "https://www.duosecurity.com/api",
@@ -21,7 +21,8 @@
         "eslint-plugin-promise": "^3.7.0",
         "eslint-plugin-standard": "^3.0.1",
         "mocha": "^5.2.0",
-        "nock": "^9.6.1"
+        "nock": "^9.6.1",
+        "sinon": "^7.2.7"
     },
     "optionalDependencies": {
         "nopt": ">= 2.1.2"
