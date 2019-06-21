@@ -26,7 +26,7 @@ describe('Verifying rate limited request retries', function () {
     clock.restore()
   })
 
-  function addRequests (statusCode, numRequests = 1) {
+  function addRequests(statusCode, numRequests = 1) {
     var stat = statusCode === OK_RESP_CODE ? 'OK' : 'FAIL'
     var date = new Date().toUTCString()
     var path = '/foo/bar'
@@ -41,7 +41,7 @@ describe('Verifying rate limited request retries', function () {
     })
     scope.get(path)
       .times(numRequests)
-      .reply(statusCode, {'response': {foo: 'bar'}, stat})
+      .reply(statusCode, { 'response': { foo: 'bar' }, stat })
     return scope
   }
 
