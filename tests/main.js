@@ -88,4 +88,49 @@ describe('Verifying rate limited request retries', function () {
       currentWaitSecs = currentWaitSecs * BACKOFF_FACTOR
     })
   })
+
+  it('verify async version propery calls existing code', function (done) {
+    let currentWaitSecs = 1000
+    var rateLimitedScope = addRequests(RATE_LIMITED_RESP_CODE)
+    addRequests(OK_RESP_CODE)
+    client
+      .jsonApiCallAsync('GET', '/foo/bar', {})
+      .then((res) => {
+        assert.equal(res.stat, 'OK')
+      })
+      .catch((err) => {
+        assert.fail('Failed to get response with async call')
+      })
+      .finally(() => done())
+
+    // Don't tick the clock until after the request has been replied to,
+    // otherwise we'll move the clock forward before adding the retry attempt
+    // via setTimeout.
+    rateLimitedScope.on('replied', function (req, interceptor) {
+      clock.tick(currentWaitSecs + MAX_RANDOM_OFFSET)
+    })
+  })
+
+  it('properly throws an error when the async function detects a problem', function (done) {
+    var currentWaitSecs = 1000
+    var scope = addRequests(RATE_LIMITED_RESP_CODE, 7)
+
+    client
+      .jsonApiCallAsync('GET', '/foo/bar/does/not/exist', {})
+      .then((res) => {
+        assert.fail('Should not get a response')
+      })
+      .catch((err) => {
+        assert.ok(err.message, 'Did not receive an error message')
+      })
+      .finally(() => done())
+
+    // Don't tick the clock until after the request has been replied to,
+    // otherwise we'll move the clock forward before adding the retry attempt
+    // via setTimeout.
+    scope.on('replied', function (req, interceptor) {
+      clock.tick(currentWaitSecs + MAX_RANDOM_OFFSET)
+      currentWaitSecs = currentWaitSecs * BACKOFF_FACTOR
+    })
+  })
 })
