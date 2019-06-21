@@ -1,45 +1,45 @@
 {
-    "name": "@duosecurity/duo_api",
-    "version": "1.2.0",
-    "license": "BSD-3-Clause",
-    "description": "Duo API SDK for Node.js applications",
-    "homepage": "https://www.duosecurity.com/api",
-    "main": "lib/main.js",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/duosecurity/duo_api_nodejs.git"
-    },
-    "scripts": {
-        "test": "./node_modules/mocha/bin/mocha ./tests/*",
-        "lint": "eslint lib/ tests/"
-    },
-    "devDependencies": {
-        "eslint": "^4.18.2",
-        "eslint-config-standard": "^11.0.0",
-        "eslint-plugin-import": "^2.8.0",
-        "eslint-plugin-node": "^5.2.1",
-        "eslint-plugin-promise": "^3.7.0",
-        "eslint-plugin-standard": "^3.0.1",
-        "mocha": "^5.2.0",
-        "nock": "^9.6.1",
-        "sinon": "^7.2.7"
-    },
-    "optionalDependencies": {
-        "nopt": ">= 2.1.2"
-    },
-    "dependencies": {},
-    "keywords": [
-        "Duo Security",
-        "Two-Factor Authentication"
-    ],
-    "readmeFilename": "README.md",
-    "bugs": {
-        "url": "https://www.duosecurity.com/support"
-    },
-    "licenses": [
-        {
-            "type": "Duo License",
-            "url": "https://github.com/duosecurity/duo_api_nodejs/blob/master/LICENSE"
-        }
-    ]
+  "name": "@duosecurity/duo_api",
+  "version": "1.3.0",
+  "license": "BSD-3-Clause",
+  "description": "Duo API SDK for Node.js applications",
+  "homepage": "https://www.duosecurity.com/api",
+  "main": "lib/main.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/duosecurity/duo_api_nodejs.git"
+  },
+  "scripts": {
+    "test": "node_modules/mocha/bin/mocha ./tests/*",
+    "lint": "eslint lib/ tests/"
+  },
+  "devDependencies": {
+    "eslint": "^4.18.2",
+    "eslint-config-standard": "^11.0.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-node": "^5.2.1",
+    "eslint-plugin-promise": "^3.7.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "mocha": "^5.2.0",
+    "nock": "^9.6.1",
+    "sinon": "^7.2.7"
+  },
+  "optionalDependencies": {
+    "nopt": ">= 2.1.2"
+  },
+  "dependencies": {},
+  "keywords": [
+    "Duo Security",
+    "Two-Factor Authentication"
+  ],
+  "readmeFilename": "README.md",
+  "bugs": {
+    "url": "https://www.duosecurity.com/support"
+  },
+  "licenses": [
+    {
+      "type": "Duo License",
+      "url": "https://github.com/duosecurity/duo_api_nodejs/blob/master/LICENSE"
+    }
+  ]
 }
