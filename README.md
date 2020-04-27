@@ -1,6 +1,10 @@
 # Overview
 
 [![Build Status](https://travis-ci.org/duosecurity/duo_api_nodejs.svg?branch=master)](https://travis-ci.org/duosecurity/duo_api_nodejs)
+[![Issues](https://img.shields.io/github/issues/duosecurity/duo_api_nodejs)](https://github.com/duosecurity/duo_api_nodejs/issues)
+[![Forks](https://img.shields.io/github/forks/duosecurity/duo_api_nodejs)](https://github.com/duosecurity/duo_api_nodejs/network/members)
+[![Stars](https://img.shields.io/github/stars/duosecurity/duo_api_nodejs)](https://github.com/duosecurity/duo_api_nodejs/stargazers)
+[![License](https://img.shields.io/badge/License-View%20License-orange)](https://github.com/duosecurity/duo_api_nodejs/blob/master/LICENSE)
 
 **Auth** - https://www.duosecurity.com/docs/authapi
 
