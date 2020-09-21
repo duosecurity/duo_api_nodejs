@@ -88,4 +88,50 @@ describe('Verifying rate limited request retries', function () {
       currentWaitSecs = currentWaitSecs * BACKOFF_FACTOR
     })
   })
+
+  describe('Testing async calls', function () {
+    it('Should properly parse and return json data', function (done) {
+      let currentWaitSecs = 1000
+      let rateLimitedScope = addRequests(RATE_LIMITED_RESP_CODE)
+      addRequests(OK_RESP_CODE)
+      client
+        .jsonApiCallAsync('GET', '/foo/bar', {})
+        .then((res) => {
+          assert.strictEqual(res.stat, 'OK')
+        })
+        .catch((err) => {
+          assert.fail(err.message)
+        })
+        .finally(() => done())
+
+      // Don't tick the clock until after the request has been replied to,
+      // otherwise we'll move the clock forward before adding the retry attempt
+      // via setTimeout.
+      rateLimitedScope.on('replied', function (req, interceptor) {
+        clock.tick(currentWaitSecs + MAX_RANDOM_OFFSET)
+      })
+    })
+
+    it('Should throw an error when the async function detects a problem', function (done) {
+      let currentWaitSecs = 1000
+      let scope = addRequests(RATE_LIMITED_RESP_CODE, 7)
+
+      client.jsonApiCallAsync('GET', '/foo/bar/does/not/exist', {})
+        .then((res) => {
+          assert.fail('Should not get a response')
+        })
+        .catch((err) => {
+          assert.ok(err.message, 'Did not receive an error message')
+        })
+        .finally(() => done())
+
+      // Don't tick the clock until after the request has been replied to,
+      // otherwise we'll move the clock forward before adding the retry attempt
+      // via setTimeout.
+      scope.on('replied', function (req, interceptor) {
+        clock.tick(currentWaitSecs + MAX_RANDOM_OFFSET)
+        currentWaitSecs = currentWaitSecs * BACKOFF_FACTOR
+      })
+    })
+  })
 })
