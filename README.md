@@ -12,6 +12,13 @@
 
 **Accounts** - https://www.duosecurity.com/docs/accountsapi
 
+## Node Versions Tested Against:
+* 8
+* 10
+* 12
+* 14
+* 15
+
 # Installing
 
 Development:
