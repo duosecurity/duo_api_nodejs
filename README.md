@@ -21,7 +21,7 @@
 
 ## TLS 1.2 and 1.3 Support
 
-Duo_api_nodejs uses the Node tls library and OpenSSL for TLS operations.  All currently supported versions of Node (14 and higher) use OpenSSL 1.1.1 which supports TLS 1.2 and 1.3.
+Duo_api_nodejs uses the Node tls library and OpenSSL for TLS operations.  All versions of Node receiving security support (14 and higher) use OpenSSL 1.1.1 which supports TLS 1.2 and 1.3.
 
 # Installing
 
