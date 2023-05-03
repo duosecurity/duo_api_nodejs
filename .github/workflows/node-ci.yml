@@ -9,6 +9,7 @@ on:
     
 jobs:
   node-ci:
+    name: Node CI - test
     runs-on: ubuntu-latest
 
     strategy:
