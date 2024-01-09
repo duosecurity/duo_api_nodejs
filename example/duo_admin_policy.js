@@ -37,7 +37,7 @@ Options:
   }
 }
 
-var client = new duo_api.Client(parsed.ikey, parsed.skey, parsed.host)
+var client = new duo_api.Client(parsed.ikey, parsed.skey, parsed.host, 5)
 
 let params = {
   'policy_name': 'api_test_policy',
