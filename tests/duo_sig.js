@@ -112,3 +112,46 @@ describe('Query Parameter Checks', function () {
     done()
   })
 })
+
+describe('Signature Checks', function () {
+  it('V2 signature', function (done) {
+    var ikey = 'test_ikey'
+    var skey = 'test_skey'
+    var method = 'POST'
+    var host = 'test.duosecurity.com'
+    var path = '/test/v1'
+    var params = {
+      'realname': 'First Last',
+      'username': 'root'
+    }
+    var date = 'Tue, 21 Aug 2012 17:29:18 -0000'
+    var exp_sig = 'Basic dGVzdF9pa2V5OjA0MmEzMGM2ODJiZDgzNmZjNWJhNDY3ODkxYTk1NmVhYTEwMDkxY2EwZjczYTdmYjM5NmFlZmQ1NmEzNTI5ZTU2OTMyZGVhNDI3YTY3MjEzYWY2NjRiYTY4NDE2ODlmZjIzMzZiN2EzNzM3NjZlYTVhYjdhYjlmZTI2MzgyMjZi'
+
+    assert.equal(
+      duo_api.sign(ikey, skey, method, host, path, params, date),
+      exp_sig
+    )
+    done()
+  })
+
+  it('V5 signature', function (done) {
+    var ikey = 'test_ikey'
+    var skey = 'test_skey'
+    var method = 'POST'
+    var host = 'test.duosecurity.com'
+    var path = '/test/v1'
+    var params = {}
+    var date = 'Tue, 21 Aug 2012 17:29:18 -0000'
+    var exp_sig = 'Basic dGVzdF9pa2V5OjdkMDI0MDlhMTUyNzY0ODQzY2NjZDgyODRkYTE1M2IzZmI0NDZiYWFkNWY5OTg4ODYzMjVlMjRiYzljZDRhMjQ0ZGU4NWFkNGJmYTdlYTI4NWQ2ODIwOWYxNjA4MzU2NzNkOGI0ZjFlMWIyM2Q5Y2Q1MjFkMjZiZmU3ZjM2NmE0'
+    var body = JSON.stringify({
+      'realname': 'First Last',
+      'username': 'root'
+    })
+
+    assert.equal(
+      duo_api.signV5(ikey, skey, method, host, path, params, date, body),
+      exp_sig
+    )
+    done()
+  })
+})
