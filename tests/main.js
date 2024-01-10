@@ -68,7 +68,6 @@ describe('Verifying rate limited request retries', function () {
     rateLimitedScope.on('replied', function (req, interceptor) {
       clock.tick(currentWaitSecs + MAX_RANDOM_OFFSET)
     })
-    console.log('added emitter')
   })
 
   it('verify all rate limited responses', function (done) {
@@ -115,11 +114,9 @@ describe('Signature Checks', function () {
     var scope = setupNock(requestHeaders)
     scope.get(/.*/)
       .reply(200, {'response': {foo: 'bar'}, stat: 'OK'})
-      .log(console.log)
 
     var client = new duo_api.Client(IKEY, SKEY, API_HOSTNAME)
     client.jsonApiCall('GET', '/foo/bar', params, function (resp) {
-      console.log(resp)
       assert.equal(resp.stat, 'OK')
       done()
     })
@@ -139,11 +136,9 @@ describe('Signature Checks', function () {
     var scope = setupNock(requestHeaders)
     scope.post(/.*/)
       .reply(200, {'response': {foo: 'bar'}, stat: 'OK'})
-      .log(console.log)
 
     var client = new duo_api.Client(IKEY, SKEY, API_HOSTNAME)
     client.jsonApiCall('POST', '/foo/bar', params, function (resp) {
-      console.log(resp)
       assert.equal(resp.stat, 'OK')
       done()
     })
@@ -163,11 +158,9 @@ describe('Signature Checks', function () {
     var scope = setupNock(requestHeaders)
     scope.get(/.*/)
       .reply(200, {'response': {foo: 'bar'}, stat: 'OK'})
-      .log(console.log)
 
-    var client = new duo_api.Client(IKEY, SKEY, API_HOSTNAME, duo_api.SIG_VERSION_5)
+    var client = new duo_api.Client(IKEY, SKEY, API_HOSTNAME, duo_api.SIGNATURE_VERSION_5)
     client.jsonApiCall('GET', '/foo/bar', params, function (resp) {
-      console.log(resp)
       assert.equal(resp.stat, 'OK')
       done()
     })
@@ -182,17 +175,15 @@ describe('Signature Checks', function () {
     var requestHeaders = {
       'Date': date,
       'Host': API_HOSTNAME,
-      //'Authorization': sig,
+      'Authorization': sig,
       'Content-type': 'application/json'
     }
     var scope = setupNock(requestHeaders)
     scope.post(/.*/)
       .reply(200, {'response': {foo: 'bar'}, stat: 'OK'})
-      .log(console.log)
 
-    var client = new duo_api.Client(IKEY, SKEY, API_HOSTNAME, duo_api.SIG_VERSION_5)
+    var client = new duo_api.Client(IKEY, SKEY, API_HOSTNAME, duo_api.SIGNATURE_VERSION_5)
     client.jsonApiCall('POST', '/foo/bar', params, function (resp) {
-      console.log(resp)
       assert.equal(resp.stat, 'OK')
       done()
     })
