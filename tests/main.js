@@ -31,7 +31,7 @@ describe('Verifying rate limited request retries', function () {
     var date = new Date().toUTCString()
     var path = '/foo/bar'
     var sig = duo_sig.sign(
-      client.ikey, client.skey, 'GET', client.host, path, {}, date, client.sig_version, client.digestmod)
+      client.ikey, client.skey, 'GET', client.host, path, {}, date)
     var scope = nock('https://' + API_HOSTNAME, {
       reqheaders: {
         'Date': date,
@@ -86,6 +86,115 @@ describe('Verifying rate limited request retries', function () {
     scope.on('replied', function (req, interceptor) {
       clock.tick(currentWaitSecs + MAX_RANDOM_OFFSET)
       currentWaitSecs = currentWaitSecs * BACKOFF_FACTOR
+    })
+  })
+})
+
+describe('Signature Checks', function () {
+  var params = {
+    'FakeParam': 'BogusValue',
+    'MoreFakeParams': 'MoreBogusValues'
+  }
+  function setupNock (requestHeaders = {}) {
+    const scope = nock('https://' + API_HOSTNAME, {
+      reqheaders: requestHeaders
+    })
+    return scope
+  }
+
+  it('V2 signature with GET', function (done) {
+    var path = '/foo/bar'
+    var date = new Date().toUTCString()
+    var sig = duo_sig.sign(
+      IKEY, SKEY, 'GET', API_HOSTNAME, path, params, date)
+    var requestHeaders = {
+      'Date': date,
+      'Host': API_HOSTNAME,
+      'Authorization': sig
+    }
+    var scope = setupNock(requestHeaders)
+    scope.get(/.*/)
+      .reply(200, {'response': {foo: 'bar'}, stat: 'OK'})
+      .log(console.log)
+
+    var client = new duo_api.Client(IKEY, SKEY, API_HOSTNAME)
+    client.jsonApiCall('GET', '/foo/bar', params, function (resp) {
+      console.log(resp)
+      assert.equal(resp.stat, 'OK')
+      done()
+    })
+  })
+
+  it('V2 signature with POST', function (done) {
+    var path = '/foo/bar'
+    var date = new Date().toUTCString()
+    var sig = duo_sig.sign(
+      IKEY, SKEY, 'POST', API_HOSTNAME, path, params, date)
+    var requestHeaders = {
+      'Date': date,
+      'Host': API_HOSTNAME,
+      'Authorization': sig,
+      'Content-type': 'application/x-www-form-urlencoded'
+    }
+    var scope = setupNock(requestHeaders)
+    scope.post(/.*/)
+      .reply(200, {'response': {foo: 'bar'}, stat: 'OK'})
+      .log(console.log)
+
+    var client = new duo_api.Client(IKEY, SKEY, API_HOSTNAME)
+    client.jsonApiCall('POST', '/foo/bar', params, function (resp) {
+      console.log(resp)
+      assert.equal(resp.stat, 'OK')
+      done()
+    })
+  })
+
+  it('V5 signature with GET', function (done) {
+    var path = '/foo/bar'
+    var date = new Date().toUTCString()
+    var body = ''
+    var sig = duo_sig.signV5(
+      IKEY, SKEY, 'GET', API_HOSTNAME, path, params, date, body)
+    var requestHeaders = {
+      'Date': date,
+      'Host': API_HOSTNAME,
+      'Authorization': sig
+    }
+    var scope = setupNock(requestHeaders)
+    scope.get(/.*/)
+      .reply(200, {'response': {foo: 'bar'}, stat: 'OK'})
+      .log(console.log)
+
+    var client = new duo_api.Client(IKEY, SKEY, API_HOSTNAME, duo_api.SIG_VERSION_5)
+    client.jsonApiCall('GET', '/foo/bar', params, function (resp) {
+      console.log(resp)
+      assert.equal(resp.stat, 'OK')
+      done()
+    })
+  })
+
+  it('V5 signature with POST', function (done) {
+    var path = '/foo/bar'
+    var date = new Date().toUTCString()
+    var body = JSON.stringify(params)
+    var sig = duo_sig.signV5(
+      IKEY, SKEY, 'POST', API_HOSTNAME, path, {}, date, body)
+    var requestHeaders = {
+      'Date': date,
+      'Host': API_HOSTNAME,
+      //'Authorization': sig,
+      'Content-type': 'application/json'
+    }
+    var scope = setupNock(requestHeaders)
+    scope.post(/.*/)
+      .reply(200, {'response': {foo: 'bar'}, stat: 'OK'})
+      .log(console.log)
+
+    var client = new duo_api.Client(IKEY, SKEY, API_HOSTNAME, duo_api.SIG_VERSION_5)
+    client.jsonApiCall('POST', '/foo/bar', params, function (resp) {
+      console.log(resp)
+      assert.equal(resp.stat, 'OK')
+      done()
     })
   })
 })
