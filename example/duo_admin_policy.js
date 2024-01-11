@@ -72,8 +72,7 @@ client.jsonApiCall(
 
     // Delete the created policy
     deletePolicy(policy_key)
-  },
-  5
+  }
 )
 
 // Delete policy function
@@ -89,7 +88,6 @@ function deletePolicy (policy_key) {
       }
       res = res.response
       console.log('Deleted policy: ' + policy_key)
-    },
-    5
+    }
   )
 }
