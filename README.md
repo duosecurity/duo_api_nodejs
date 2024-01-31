@@ -1,6 +1,6 @@
 # Overview
 
-[![Build Status](https://github.com/duosecurity/duo_api_nodejs/workflows/.NET%20CI/badge.svg)](https://github.com/duosecurity/duo_api_nodejs/actions)
+[![Build Status](https://github.com/duosecurity/duo_api_nodejs/workflows/Node%20CI/badge.svg)](https://github.com/duosecurity/duo_api_nodejs/actions)
 [![Issues](https://img.shields.io/github/issues/duosecurity/duo_api_nodejs)](https://github.com/duosecurity/duo_api_nodejs/issues)
 [![Forks](https://img.shields.io/github/forks/duosecurity/duo_api_nodejs)](https://github.com/duosecurity/duo_api_nodejs/network/members)
 [![Stars](https://img.shields.io/github/stars/duosecurity/duo_api_nodejs)](https://github.com/duosecurity/duo_api_nodejs/stargazers)
