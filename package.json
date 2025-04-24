@@ -1,6 +1,6 @@
 {
     "name": "@duosecurity/duo_api",
-    "version": "1.4.0",
+    "version": "1.5.0",
     "license": "BSD-3-Clause",
     "description": "Duo API SDK for Node.js applications",
     "homepage": "https://www.duosecurity.com/api",
