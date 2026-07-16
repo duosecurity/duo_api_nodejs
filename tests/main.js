@@ -234,4 +234,26 @@ describe('CA Pinning Configuration', function () {
       done()
     })
   })
+
+  it('User agent includes ca_bundle version and ca_pinning=enabled when pinning is on', function (done) {
+    var client = new duo_api.Client(IKEY, SKEY, API_HOSTNAME)
+    client.jsonApiCall('GET', '/foo/bar', {}, function (resp) {
+      var options = requestSpy.firstCall.args[0]
+      var ua = options.headers['User-Agent']
+      assert(ua.includes('ca_bundle/1.0'))
+      assert(ua.includes('(ca_pinning=enabled)'))
+      done()
+    })
+  })
+
+  it('User agent includes ca_pinning=disabled when pinning is off', function (done) {
+    var client = new duo_api.Client(IKEY, SKEY, API_HOSTNAME, duo_api.SIGNATURE_VERSION_2, false)
+    client.jsonApiCall('GET', '/foo/bar', {}, function (resp) {
+      var options = requestSpy.firstCall.args[0]
+      var ua = options.headers['User-Agent']
+      assert(ua.includes('ca_bundle/1.0'))
+      assert(ua.includes('(ca_pinning=disabled)'))
+      done()
+    })
+  })
 })
