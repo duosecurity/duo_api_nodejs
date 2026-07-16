@@ -2,8 +2,10 @@
 var assert = require('assert')
 var nock = require('nock')
 var sinon = require('sinon')
+var https = require('https')
 var duo_api = require('../lib/main.js')
 var duo_sig = require('../lib/duo_sig')
+var constants = require('../lib/constants')
 
 var IKEY = 'DIXXXXXXXXXXXXXXXXXX'
 var SKEY = 'deadbeefdeadbeefdeadbeefdeadbeefdeadbeef'
@@ -185,6 +187,50 @@ describe('Signature Checks', function () {
     var client = new duo_api.Client(IKEY, SKEY, API_HOSTNAME, duo_api.SIGNATURE_VERSION_5)
     client.jsonApiCall('POST', '/foo/bar', params, function (resp) {
       assert.equal(resp.stat, 'OK')
+      done()
+    })
+  })
+})
+
+describe('CA Pinning Configuration', function () {
+  var requestSpy
+
+  beforeEach(function () {
+    requestSpy = sinon.spy(https, 'request')
+    nock('https://' + API_HOSTNAME)
+      .get('/foo/bar')
+      .reply(200, {'response': {foo: 'bar'}, stat: 'OK'})
+  })
+
+  afterEach(function () {
+    requestSpy.restore()
+  })
+
+  it('CA pinning is enabled by default', function (done) {
+    var client = new duo_api.Client(IKEY, SKEY, API_HOSTNAME)
+    assert.strictEqual(client.enableCAPinning, true)
+    client.jsonApiCall('GET', '/foo/bar', {}, function (resp) {
+      var options = requestSpy.firstCall.args[0]
+      assert.strictEqual(options.ca, constants.DUO_PINNED_CERT)
+      done()
+    })
+  })
+
+  it('CA pinning can be disabled via constructor parameter', function (done) {
+    var client = new duo_api.Client(IKEY, SKEY, API_HOSTNAME, duo_api.SIGNATURE_VERSION_2, false)
+    assert.strictEqual(client.enableCAPinning, false)
+    client.jsonApiCall('GET', '/foo/bar', {}, function (resp) {
+      var options = requestSpy.firstCall.args[0]
+      assert.strictEqual(options.ca, undefined)
+      done()
+    })
+  })
+
+  it('TLS verification is still enforced when CA pinning is disabled', function (done) {
+    var client = new duo_api.Client(IKEY, SKEY, API_HOSTNAME, duo_api.SIGNATURE_VERSION_2, false)
+    client.jsonApiCall('GET', '/foo/bar', {}, function (resp) {
+      var options = requestSpy.firstCall.args[0]
+      assert.strictEqual(options.rejectUnauthorized, true)
       done()
     })
   })
