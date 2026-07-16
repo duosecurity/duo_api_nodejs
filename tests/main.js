@@ -230,7 +230,7 @@ describe('CA Pinning Configuration', function () {
     var client = new duo_api.Client(IKEY, SKEY, API_HOSTNAME, duo_api.SIGNATURE_VERSION_2, false)
     client.jsonApiCall('GET', '/foo/bar', {}, function (resp) {
       var options = requestSpy.firstCall.args[0]
-      assert.strictEqual(options.rejectUnauthorized, undefined)
+      assert.strictEqual(options.rejectUnauthorized, true)
       done()
     })
   })
