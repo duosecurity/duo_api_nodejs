@@ -240,7 +240,7 @@ describe('CA Pinning Configuration', function () {
     client.jsonApiCall('GET', '/foo/bar', {}, function (resp) {
       var options = requestSpy.firstCall.args[0]
       var ua = options.headers['User-Agent']
-      assert(ua.includes('ca_bundle/1.0'))
+      assert(ua.includes('ca_bundle/' + constants._CA_BUNDLE_VERSION))
       assert(ua.includes('(ca_pinning=enabled)'))
       done()
     })
@@ -251,7 +251,7 @@ describe('CA Pinning Configuration', function () {
     client.jsonApiCall('GET', '/foo/bar', {}, function (resp) {
       var options = requestSpy.firstCall.args[0]
       var ua = options.headers['User-Agent']
-      assert(ua.includes('ca_bundle/1.0'))
+      assert(ua.includes('ca_bundle/' + constants._CA_BUNDLE_VERSION))
       assert(ua.includes('(ca_pinning=disabled)'))
       done()
     })
